@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10">
+           
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-header header-gradient">
+                    <h5 class="mb-0"><i class="fas fa-user"></i> Información Personal</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6"><strong>DNI:</strong> {{ alumno.dni }}</div>
+                        <div class="col-md-6"><strong>Nombre y apellido:</strong> {{ alumno.nombre }} {{ alumno.apellido }}</div>
+                        <div class="col-md-6"><strong>Fecha de nacimiento:</strong> {{ alumno.fecha_nacimiento|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Teléfono:</strong> {{ alumno.telefono|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Email:</strong> {{ alumno.email|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Domicilio:</strong> {{ alumno.domicilio|default:'-' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-header header-gradient">
+                    <h5 class="mb-0"><i class="fas fa-book"></i> Información Académica</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6"><strong>Año:</strong> {{ alumno.año }}</div>
+                        <div class="col-md-6"><strong>Estado:</strong> 
+                            <span class="badge bg-{% if alumno.estado == 'Inscripto' %}success{% elif alumno.estado == 'Preinscripto' %}warning{% else %}danger{% endif %}">
+                                {{ alumno.estado }}
+                            </span>
+                        </div>
+                        <div class="col-md-6"><strong>Carrera:</strong> {{ alumno.carrera|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Legajo:</strong> {{ alumno.matricula|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Turno:</strong> {{ alumno.turno|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Curso / División:</strong> {{ alumno.curso|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Situación académica:</strong> {{ alumno.situacion_academica|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Continuidad de estudios:</strong> {{ alumno.continuidad_estudios|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Estudios primarios:</strong> {{ alumno.estudios_primarios|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Estudios secundarios:</strong> {{ alumno.estudios_secundarios|default:'-' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-header header-gradient">
+                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> Situación del Alumno</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6"><strong>Unidad / Institución:</strong> {{ alumno.unidad|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Pabellón:</strong> {{ alumno.pabellon|default:'-' }}</div>
+                        <div class="col-md-6"><strong>Situación laboral:</strong> {{ alumno.situacion_laboral|default:'-' }}</div>
+                        <div class="col-md-6">
+                            <strong>Recuperó la libertad:</strong> 
+                            <span class="badge {% if alumno.recupero_libertad %}bg-success{% else %}bg-secondary{% endif %}">
+                                {% if alumno.recupero_libertad %}Sí{% else %}No{% endif %}
+                            </span>
+                        </div>
+                        {% if alumno.recupero_libertad %}
+                        <div class="col-md-6"><strong>Fecha de recuperación:</strong> {{ alumno.fecha_recupero_libertad|default:'-' }}</div>
+                        {% endif %}
+                        <div class="col-12"><strong>Observaciones:</strong> {{ alumno.observaciones|default:'-' }}</div>
+                    </div>
+                </div>
+            </div>
+
+       
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-header header-gradient d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-file-upload"></i> Documentación</h5>
+                    <a href="{% url 'agregar_documento' alumno.id %}" class="btn btn-sm btn-success">
+                        <i class="fas fa-plus"></i> Agregar documento
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if documentos %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Descripción</th>
+                                        <th>Fecha</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for doc in documentos %}
+                                    <tr>
+                                        <td><span class="badge bg-info">{{ doc.get_tipo_display }}</span></td>
+                                        <td>{{ doc.descripcion }}</td>
+                                        <td>{{ doc.fecha_subida|date:"d/m/Y" }}</td>
+                                        <td>
+                                            <a href="{{ doc.archivo.url }}" target="_blank" class="btn btn-sm btn-primary" title="Descargar">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                            <a href="{% url 'eliminar_documento' doc.id %}" class="btn btn-sm btn-danger" title="Eliminar">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No hay documentación cargada para este alumno.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Transiciones -->
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-header header-gradient d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-exchange-alt"></i> Transiciones y Cambios</h5>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'registrar_traslado' alumno.id %}" class="btn btn-info" title="Registrar traslado">
+                            <i class="fas fa-map-marker-alt"></i> Traslado
+                        </a>
+                        <a href="{% url 'registrar_cambio_carrera' alumno.id %}" class="btn btn-info" title="Registrar cambio de carrera">
+                            <i class="fas fa-book"></i> Cambio Carrera
+                        </a>
+                        {% if not alumno.recupero_libertad %}
+                        <a href="{% url 'registrar_recupero_libertad' alumno.id %}" class="btn btn-success" title="Registrar recuperación de libertad">
+                            <i class="fas fa-check"></i> Libertad
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if transiciones %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Fecha</th>
+                                        <th>Usuario</th>
+                                        <th>Razón</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for trans in transiciones %}
+                                    <tr>
+                                        <td><span class="badge bg-warning">{{ trans.get_tipo_display }}</span></td>
+                                        <td>{{ trans.fecha_transicion|date:"d/m/Y H:i" }}</td>
+                                        <td>{{ trans.usuario.username|default:'-' }}</td>
+                                        <td>{{ trans.razon|default:'-'|truncatewords:10 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No hay transiciones registradas para este alumno.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+          
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-header header-gradient">
+                    <h5 class="mb-0"><i class="fas fa-history"></i> Registro de Auditoría</h5>
+                </div>
+                <div class="card-body">
+                    {% if audit_logs %}
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Acción</th>
+                                        <th>Usuario</th>
+                                        <th>Campo</th>
+                                        <th>Cambio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for log in audit_logs %}
+                                    <tr>
+                                        <td>{{ log.fecha|date:"d/m/Y H:i" }}</td>
+                                        <td><span class="badge bg-secondary">{{ log.accion }}</span></td>
+                                        <td>{{ log.usuario.username|default:'-' }}</td>
+                                        <td>{{ log.campo_modificado|default:'-' }}</td>
+                                        <td>
+                                            {% if log.valor_anterior %}
+                                            <small class="text-muted">{{ log.valor_anterior }} → {{ log.valor_nuevo }}</small>
+                                            {% elif log.descripcion %}
+                                            <small class="text-muted">{{ log.descripcion }}</small>
+                                            {% else %}
+                                            -
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No hay registros de auditoría.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            
+            <div class="mt-4 d-flex gap-2">
+                <a href="{% url 'editar' alumno.id %}" class="btn btn-gradient-warning">
+                    <i class="fas fa-edit"></i> Editar datos
+                </a>
+                <a href="{% url 'eliminar' alumno.id %}" class="btn btn-gradient-danger">
+                    <i class="fas fa-trash"></i> Eliminar
+                </a>
+                <a href="{% url 'listar' %}" class="btn btn-gradient-primary">
+                    <i class="fas fa-arrow-left"></i> Volver a legajos
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

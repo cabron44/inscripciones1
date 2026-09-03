@@ -1,0 +1,146 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+        <h1 class="page-title mb-0"><i class="fas fa-list me-2"></i> Legajos de alumnos</h1>
+    </div>
+
+    <div class="card section-card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label for="dni" class="form-label fw-semibold">Buscar por DNI</label>
+                    <input type="text" id="dni" name="dni" value="{{ dni_busqueda }}" class="form-control" placeholder="Ej: 12345678">
+                </div>
+                <div class="col-md-3">
+                    <label for="legajo" class="form-label fw-semibold">Buscar por legajo</label>
+                    <input type="text" id="legajo" name="legajo" value="{{ legajo_busqueda }}" class="form-control" placeholder="Ej: 2026-001">
+                </div>
+                <div class="col-md-3">
+                    <label for="apellido" class="form-label fw-semibold">Apellido</label>
+                    <input type="text" id="apellido" name="apellido" value="{{ apellido_busqueda }}" class="form-control" placeholder="Ej: García">
+                </div>
+                <div class="col-md-3">
+                    <label for="carrera" class="form-label fw-semibold">Carrera</label>
+                    <select id="carrera" name="carrera" class="form-select">
+                        <option value="">Todas</option>
+                        {% for carrera in carreras %}
+                            <option value="{{ carrera }}" {% if carrera == carrera_filtro %}selected{% endif %}>{{ carrera }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="estado" class="form-label fw-semibold">Estado</label>
+                    <select id="estado" name="estado" class="form-select">
+                        <option value="">Todos</option>
+                        {% for estado in estados %}
+                            <option value="{{ estado }}" {% if estado == estado_filtro %}selected{% endif %}>{{ estado }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="turno" class="form-label fw-semibold">Turno</label>
+                    <select id="turno" name="turno" class="form-select">
+                        <option value="">Todos</option>
+                        {% for turno in turnos %}
+                            <option value="{{ turno }}" {% if turno == turno_filtro %}selected{% endif %}>{{ turno }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="pabellon" class="form-label fw-semibold">Pabellón</label>
+                    <select id="pabellon" name="pabellon" class="form-select">
+                        <option value="">Todos</option>
+                        {% for pabellon in pabellones %}
+                            <option value="{{ pabellon }}" {% if pabellon == pabellon_filtro %}selected{% endif %}>{{ pabellon }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-1 d-flex gap-2">
+                    <button type="submit" class="btn btn-gradient-primary w-100">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+            <div class="mt-3">
+                <a href="{% url 'listar' %}" class="btn btn-outline-secondary btn-sm">Limpiar filtros</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 d-flex flex-wrap gap-2">
+        <a href="{% url 'crear' %}" class="btn btn-gradient-success">
+            <i class="fas fa-plus"></i> Nuevo alumno
+        </a>
+        <button type="button" data-print-page class="btn btn-gradient-primary">
+            <i class="fas fa-print"></i> Imprimir lista
+        </button>
+    </div>
+
+    <div class="table-responsive card section-card">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>DNI</th>
+                    <th>Legajo</th>
+                    <th>Apellido y nombre</th>
+                    <th>Carrera</th>
+                    <th>Año</th>
+                    <th>Pabellón</th>
+                    <th>Turno</th>
+                    <th>Estado</th>
+                    <th>Doc</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in alumnos %}
+                <tr>
+                    <td>{{ a.dni }}</td>
+                    <td>{{ a.matricula|default:'-' }}</td>
+                    <td>{{ a.apellido }}, {{ a.nombre }}</td>
+                    <td>{{ a.carrera|default:'-' }}</td>
+                    <td>{{ a.año }}</td>
+                    <td>{{ a.pabellon|default:'-' }}</td>
+                    <td>{{ a.turno|default:'-' }}</td>
+                    <td>
+                        <span class="badge text-white status-badge {% if a.estado == 'Preinscripto' %}status-preinscripto{% elif a.estado == 'Inscripto' %}status-inscripto{% elif a.estado == 'Baja' %}status-baja{% endif %}">
+                            {{ a.estado }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if a.documento %}
+                            <a href="{{ a.documento.url }}" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'detalle_alumno' a.id %}" class="btn btn-sm btn-gradient-primary">
+                                <i class="fas fa-eye"></i> Ver
+                            </a>
+                            <a href="{% url 'editar' a.id %}" class="btn btn-sm btn-gradient-warning">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a href="{% url 'eliminar' a.id %}" class="btn btn-sm btn-gradient-danger">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if not alumnos %}
+    <div class="alert text-center text-white mt-3 btn-gradient-primary">
+        <i class="fas fa-info-circle"></i> No hay legajos registrados para esa búsqueda.
+    </div>
+    {% endif %}
+</div>
+<script src="{% static 'js/print.js' %}"></script>
+{% endblock %}

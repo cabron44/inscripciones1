@@ -1,0 +1,194 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-9">
+            <div class="card shadow-sm border-0">
+                <div class="card-header header-gradient">
+                    <h1 class="h4 mb-0">
+                        <i class="fas fa-user-plus"></i> {% if form.instance.pk %}Editar{% else %}Registrar{% endif %} alumno / legajo educativo
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.dni.id_for_label }}" class="form-label">DNI</label>
+                                {{ form.dni }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre</label>
+                                {{ form.nombre }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.apellido.id_for_label }}" class="form-label">Apellido</label>
+                                {{ form.apellido }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.fecha_nacimiento.id_for_label }}" class="form-label">Fecha de nacimiento</label>
+                                {{ form.fecha_nacimiento }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.año.id_for_label }}" class="form-label">Año</label>
+                                {{ form.año }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.matricula.id_for_label }}" class="form-label">Legajo</label>
+                                {{ form.matricula }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.carrera.id_for_label }}" class="form-label">Carrera</label>
+                                {{ form.carrera }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.unidad.id_for_label }}" class="form-label">Unidad / institución</label>
+                                {{ form.unidad }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.estado.id_for_label }}" class="form-label">Estado</label>
+                                {{ form.estado }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.pabellon.id_for_label }}" class="form-label">Pabellón</label>
+                                {{ form.pabellon }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.turno.id_for_label }}" class="form-label">Turno</label>
+                                {{ form.turno }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.situacion_academica.id_for_label }}" class="form-label">Situación académica</label>
+                                {{ form.situacion_academica }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.continuidad_estudios.id_for_label }}" class="form-label">Continuidad de estudios</label>
+                                {{ form.continuidad_estudios }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.telefono.id_for_label }}" class="form-label">Teléfono</label>
+                                {{ form.telefono }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">Correo electrónico</label>
+                                {{ form.email }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.domicilio.id_for_label }}" class="form-label">Domicilio</label>
+                            {{ form.domicilio }}
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            {{ form.recupero_libertad }}
+                            <label for="{{ form.recupero_libertad.id_for_label }}" class="form-check-label">Recuperó la libertad</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
+                            {{ form.observaciones }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.curso.id_for_label }}" class="form-label">Curso / División</label>
+                                {{ form.curso }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.situacion_laboral.id_for_label }}" class="form-label">Situación laboral</label>
+                                {{ form.situacion_laboral }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.estudios_primarios.id_for_label }}" class="form-label">Estudios primarios</label>
+                                {{ form.estudios_primarios }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.estudios_secundarios.id_for_label }}" class="form-label">Estudios secundarios</label>
+                                {{ form.estudios_secundarios }}
+                            </div>
+                        </div>
+
+                        
+                        
+
+                        
+            
+               
+
+                        <div class="mb-3">
+                            <label for="{{ form.documento.id_for_label }}" class="form-label">Documentación escaneada</label>
+                            {{ form.documento }}
+                            <i class="fas fa-plus">{{ form.documento }}</i> Agregar documento
+                        </div>
+                    <div class="card-body">
+                    {% if documentos %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Descripción</th>
+                                        <th>Fecha</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for doc in documentos %}
+                                    <tr>
+                                        <td><span class="badge bg-info">{{ doc.get_tipo_display }}</span></td>
+                                        <td>{{ doc.descripcion }}</td>
+                                        <td>{{ doc.fecha_subida|date:"d/m/Y" }}</td>
+                                        <td>
+                                            <a href="{{ doc.archivo.url }}" target="_blank" class="btn btn-sm btn-primary" title="Descargar">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                            <a href="{% url 'eliminar_documento' doc.id %}" class="btn btn-sm btn-danger" title="Eliminar">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No hay documentación cargada para este alumno.</p>
+                    {% endif %}
+                </div>
+            </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-gradient-success" type="submit">
+                                <i class="fas fa-save"></i> Guardar alumno
+                            </button>
+                            <a href="{% url 'listar' %}" class="btn btn-gradient-primary">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

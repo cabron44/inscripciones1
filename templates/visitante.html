@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="alert alert-dismissible fade show visitor-alert" role="alert">
+        <i class="fas fa-glasses"></i> <strong>Modo Visitante</strong> - Tienes acceso de solo lectura.
+        <a href="{% url 'login' %}" class="btn btn-sm ms-2 btn-gradient-success">
+            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </a>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-header header-gradient">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle"></i> Información para Visitantes
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Bienvenido al Sistema de Inscripciones</strong></p>
+                    <p>Como visitante tienes acceso limitado al sistema.</p>
+                    <ul>
+                        <li><i class="fas fa-check-circle text-success"></i> Información institucional</li>
+                        <li><i class="fas fa-check-circle text-success"></i> Acceso a la pantalla de inicio</li>
+                    </ul>
+
+                    <hr>
+
+                    <p><strong>Para obtener acceso completo:</strong></p>
+                    <ul>
+                        <li><i class="fas fa-times-circle text-danger"></i> <strong>No disponible:</strong> Ver lista completa de alumnos</li>
+                        <li><i class="fas fa-times-circle text-danger"></i> <strong>No disponible:</strong> Crear o editar alumnos</li>
+                        <li><i class="fas fa-times-circle text-danger"></i> <strong>No disponible:</strong> Generar carnets</li>
+                    </ul>
+
+                    <p class="mt-3">
+                        <a href="{% url 'login' %}" class="btn btn-gradient-success">
+                            <i class="fas fa-sign-in-alt"></i> Inicia sesión para acceder al sistema completo
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header header-gradient-green">
+                    <h5 class="mb-0">
+                        <i class="fas fa-crown"></i> Superusuario
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>Acceso completo al sistema:</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check-circle text-success"></i> Gestión de alumnos</li>
+                        <li><i class="fas fa-check-circle text-success"></i> Generación de carnets</li>
+                        <li><i class="fas fa-check-circle text-success"></i> Administración del sistema</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header header-gradient-blue">
+                    <h5 class="mb-0">
+                        <i class="fas fa-eye"></i> Visitante
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>Acceso limitado (solo lectura):</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check-circle text-success"></i> Ver información pública</li>
+                        <li><i class="fas fa-times-circle text-danger"></i> No puede editar datos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

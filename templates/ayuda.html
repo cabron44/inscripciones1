@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+       
+        <div class="col-md-3 d-none d-md-block">
+            <div class="card sticky-top sticky-sidebar">
+                <div class="card-header bg-info text-white">
+                    <h5><i class="fas fa-question-circle"></i> Ayuda</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="#manual" class="list-group-item list-group-item-action">
+                        <i class="fas fa-book"></i> Manual de Usuario
+                    </a>
+                    <a href="#isft" class="list-group-item list-group-item-action">
+                        <i class="fas fa-school"></i> 
+                    </a>
+                    <a href="#contacto" class="list-group-item list-group-item-action">
+                        <i class="fas fa-envelope"></i> Contacto
+                    </a>
+                </div>
+            </div>
+        </div>
+       
+        <div class="col-md-9 col-12">
+            <h1><i class="fas fa-question-circle"></i> Centro de Ayuda</h1>
+
+            <div id="manual" class="mb-5">
+                <h2><i class="fas fa-book"></i> Manual de Usuario</h2>
+                <p>Bienvenido al Sistema de Inscripciones. Este manual te guiará para usar todas las funciones del sistema.</p>
+
+                <h3>1. Inicio de Sesión</h3>
+                <p>Para acceder al sistema, ve a la página de login e ingresa tus credenciales proporcionadas por el administrador.</p>
+
+                <h3>2. Dashboard</h3>
+                <p>La página principal muestra estadísticas generales de los alumnos: total, preinscriptos, inscriptos y bajas.</p>
+
+                <h3>3. Gestionar Alumnos</h3>
+                <ul>
+                    <li><strong>Crear Alumno:</strong> Haz clic en "Nuevo Alumno" y completa el formulario con DNI (8 dígitos), nombre, apellido, año y estado.</li>
+                    <li><strong>Ver Lista:</strong> Accede a la lista completa de alumnos con opciones para editar o eliminar.</li>
+                    <li><strong>Editar:</strong> Modifica los datos de un alumno existente.</li>
+                    <li><strong>Eliminar:</strong> Borra un alumno después de confirmar la acción.</li>
+                </ul>
+
+                <h3>4. Estados de Alumnos</h3>
+                <ul>
+                    <li><strong>Preinscripto:</strong> Alumno que ha iniciado el proceso de inscripción.</li>
+                    <li><strong>Inscripto:</strong> Alumno formalmente inscrito.</li>
+                    <li><strong>Baja:</strong> Alumno que ha dado de baja su inscripción.</li>
+                </ul>
+
+                <h3>5. Navegación</h3>
+                <p>Usa la barra de navegación superior o el menú lateral para moverte entre secciones.</p>
+            </div>
+
+            <div id="isft" class="mb-5">
+                <h2><i class="fas fa-school"></i> Información del ISFT 12</h2>
+                <p>El Instituto Superior de Formación Técnica N°12 (ISFT 12) es una institución educativa dedicada a la formación técnica superior en la provincia de Buenos Aires, Argentina.</p>
+
+                <h3>Misión</h3>
+                <p>Formar técnicos superiores competentes, capaces de insertarse en el mundo laboral y contribuir al desarrollo tecnológico y productivo de la sociedad.</p>
+
+                <h3>Visión</h3>
+                <p>Ser una institución de referencia en la formación técnica superior, reconocida por la calidad de sus egresados y su contribución al desarrollo regional.</p>
+
+                <h3>Oferta Educativa</h3>
+                <ul>
+                    <li>Técnico Superior en Programación</li>
+                    <li>Técnico Superior en Electrónica</li>
+                    <li>Técnico Superior en Mecánica</li>
+                    <li>Y otros programas técnicos</li>
+                </ul>
+
+                <h3>Ubicación</h3>
+                <p>Dirección: [Dirección del ISFT 12]<br>
+                Teléfono: [Número de teléfono]<br>
+                Email: info@isft12.edu.ar<br>
+                Sitio web: www.isft12.edu.ar</p>
+            </div>
+
+            <div id="contacto">
+                <h2><i class="fas fa-envelope"></i> Contacto</h2>
+                <p>Si tienes problemas o preguntas, contacta al administrador del sistema:</p>
+                <ul>
+                    <li>Email: admin@isft12.edu.ar</li>
+                    <li>Teléfono: [Número de soporte]</li>
+                </ul>
+                <p>También puedes consultar la documentación técnica en el repositorio del proyecto.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

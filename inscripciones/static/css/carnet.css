@@ -1,0 +1,36 @@
+.carnet-card {
+    width: 216px;
+    height: 340px;
+    border: 2px solid #000;
+    font-size: 11px;
+}
+
+.carnet-qr {
+    width: 80px;
+    height: 80px;
+}
+
+.carnet-seal {
+    font-size: 9px;
+    color: #4b5563;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .carnet-card {
+        visibility: visible;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 216px !important;
+        height: 340px !important;
+    }
+
+    .btn {
+        display: none !important;
+    }
+}

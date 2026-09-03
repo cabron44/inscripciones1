@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Inscripciones</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- <style>
+        :root {
+            --primary: #1f4e78;
+            --primary-strong: #163a5c;
+            --primary-soft: #eaf2fb;
+            --accent: #2e75b6;
+            --success: #2f8f5b;
+            --warning: #d9a441;
+            --danger: #c94d4d;
+            --ink: #1f2937;
+            --muted: #6b7280;
+            --surface: #ffffff;
+            --surface-alt: #f5f7fb;
+            --border: #e5e7eb;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f4f7fb 0%, #eef4fa 100%);
+            color: var(--ink);
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-strong) 0%, var(--accent) 100%);
+            box-shadow: 0 10px 25px rgba(31, 78, 120, 0.15);
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: rgba(255,255,255,0.92) !important;
+        }
+
+        .nav-link:hover,
+        .nav-link:focus {
+            color: #fff !important;
+        }
+
+        .dropdown-menu {
+            border: 1px solid var(--border);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+            border-radius: 14px;
+        }
+
+        .btn {
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 0.7rem 1.1rem;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .card {
+            border: 1px solid rgba(17, 24, 39, 0.06);
+            border-radius: 18px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+            background: var(--surface);
+        }
+
+        .card-header {
+            border-bottom: none;
+            border-radius: 18px 18px 0 0 !important;
+            padding: 1rem 1.2rem;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: #fff;
+            padding: 0.75rem 0.9rem;
+            min-height: 48px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: rgba(46, 117, 182, 0.5);
+            box-shadow: 0 0 0 0.2rem rgba(46, 117, 182, 0.12);
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: var(--primary-strong);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-card {
+            border: none;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 14px 28px rgba(31, 78, 120, 0.12);
+        }
+
+        .stat-card .card-body {
+            padding: 1.4rem 1rem;
+        }
+
+        .stat-card h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            opacity: 0.9;
+        }
+
+        .stat-card h2 {
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin: 0.6rem 0 0;
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #1f4e78 0%, #2e75b6 100%);
+            color: white;
+            font-weight: 600;
+            border: none;
+            vertical-align: middle;
+        }
+
+        .table > :not(caption) > * > * {
+            padding: 0.9rem 0.85rem;
+        }
+
+        .table tbody tr {
+            transition: background 0.15s ease;
+        }
+
+        .table tbody tr:hover {
+            background: #f3f8ff;
+        }
+
+        .section-card {
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(4px);
+        }
+
+        .sidebar-card {
+            border: none;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 26px rgba(31, 78, 120, 0.09);
+        }
+
+        .sidebar-card .list-group-item {
+            border: none;
+            padding: 0.9rem 1rem;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .sidebar-card .list-group-item.active {
+            background: linear-gradient(135deg, #eaf2fb 0%, #dfeeff 100%);
+            color: var(--primary-strong);
+            border-left: 4px solid var(--accent);
+            font-weight: 700;
+        }
+
+        .badge {
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.55rem 0.8rem;
+        }
+
+        @media print {
+            .navbar, .btn, .fas, .card, .list-group, .dropdown, .collapse {
+                display: none !important;
+            }
+
+            body {
+                font-size: 12px;
+                background: white;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            th, td {
+                border: 1px solid #000;
+                padding: 5px;
+            }
+
+            h1 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        } 
+    </style> -->
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+                <div class="d-flex align-items-center justify-content-center bg-white rounded-2 px-2 py-1 brand-mark">
+                    <i class="fas fa-book-open text-primary"></i>
+                </div>
+                <span>Sistema de Inscripciones</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard' %}">
+                                <i class="fas fa-home"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-bars"></i> Menú
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'listar' %}">
+                                    <i class="fas fa-list"></i> Lista de Alumnos
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'crear' %}">
+                                    <i class="fas fa-plus"></i> Nuevo Alumno
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'ayuda' %}">
+                                    <i class="fas fa-question-circle"></i> Ayuda
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item me-2">
+                        <button id="theme-toggle" class="btn btn-light" title="Cambiar Tema">
+                            <i class="fas fa-adjust"></i>
+                        </button>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ayuda' %}" title="Ayuda">
+                                <i class="fas fa-question-circle"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4 mb-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/carnet.css' %}">
+<div class="container-fluid">
+    <div class="d-flex justify-content-center mb-4">
+        <div class="card carnet-card">
+            <div class="card-header text-center py-1 header-gradient">
+                <h6 class="mb-0">INSTITUTO SUPERIOR DE FORMACIÓN TÉCNICA N°12</h6>
+                <small>La Plata, Buenos Aires</small>
+            </div>
+            <div class="card-body p-2">
+                <div class="text-center mb-2">
+                    <img src="data:image/png;base64,{{ qr_image|safe }}" alt="QR Code" class="carnet-qr">
+                </div>
+                <p class="mb-1"><strong>DNI:</strong> {{ alumno.dni }}</p>
+                <p class="mb-1"><strong>Nombre:</strong> {{ alumno.nombre }}</p>
+                <p class="mb-1"><strong>Apellido:</strong> {{ alumno.apellido }}</p>
+                <p class="mb-1"><strong>Año:</strong> {{ alumno.año }}</p>
+                <p class="mb-1"><strong>Estado:</strong> {{ alumno.estado }}</p>
+            </div>
+            <div class="card-footer text-center py-1">
+                <small>SERVICIO PENITENCIARIO BONAERENSE<br>UNIDAD CARCELARIA N°9 - LA PLATA</small>
+                <div class="mt-1 carnet-seal">Documento institucional</div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+            <button type="button" data-print-page class="btn btn-primary text-white">
+                <i class="fas fa-print"></i> Imprimir Carnet
+            </button>
+            <button type="button" id="share-carnet" data-carnet-id="{{ alumno.id }}" class="btn btn-gradient-success">
+                <i class="fab fa-whatsapp"></i> Compartir por WhatsApp
+            </button>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary text-white no-decoration">
+                <i class="fas fa-arrow-left"></i> Volver
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="{% static 'js/print.js' %}"></script>
+<script src="{% static 'js/carnet.js' %}"></script>
+
+{% endblock %}
