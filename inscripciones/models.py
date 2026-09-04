@@ -11,6 +11,7 @@ class Usuario(AbstractUser):
         CENS = 2, 'Cens'
         ISFT = 3, 'ISFT'
         
+    username = None
     
     nombre = models.CharField(max_length=100, verbose_name="Nombre")
     apellido = models.CharField(max_length=100, verbose_name="Apellido")
@@ -20,7 +21,7 @@ class Usuario(AbstractUser):
     is_active = models.BooleanField(default=True, verbose_name="Activo")
 
     USERNAME_FIELD = 'dni'
-    REQUIRED_FIELDS = ['nombre', 'apellido', 'dni' 'email', 'rol']
+    REQUIRED_FIELDS = ['nombre', 'apellido', 'email', 'rol']
     
     def save(self, *args, **kwargs):
         if not self.id:

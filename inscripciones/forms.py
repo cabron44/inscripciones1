@@ -140,16 +140,19 @@ class RecuperoLibertadForm(forms.Form):
 
 class GestionUsuarioForm(forms.ModelForm):
     """Formulario para que el administrador cree usuarios del sistema."""
+
     password = forms.CharField(
         label='Contraseña',
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
         min_length=8,
         help_text='Mínimo 8 caracteres.'
     )
+
     password_confirmacion = forms.CharField(
         label='Repetir contraseña',
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
+
     rol = forms.ChoiceField(
         label='Rol',
         choices=[
@@ -162,40 +165,65 @@ class GestionUsuarioForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ['username', 'first_name', 'last_name', 'email']
+        fields = ['nombre', 'apellido', 'dni', 'email']
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'apellido': forms.TextInput(attrs={'class': 'form-control'}),
+            'dni': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
 
-    def clean_username(self):
-        username = self.cleaned_data['username'].strip()
+    def clean_dni(self):
+        dni = self.cleaned_data['dni'].strip()
+
+        if not dni.isdigit():
+            raise forms.ValidationError(
+                'El DNI debe contener solamente números.'
+            )
+
+        if len(dni) < 7 or len(dni) > 8:
+            raise forms.ValidationError(
+                'El DNI debe tener entre 7 y 8 dígitos.'
+            )
+
         User = get_user_model()
-        if User.objects.filter(username__iexact=username).exists():
-            raise forms.ValidationError('Ya existe un usuario con ese nombre.')
-        return username
+
+        if User.objects.filter(dni=dni).exists():
+            raise forms.ValidationError(
+                'Ya existe un usuario con ese DNI.'
+            )
+
+        return dni
 
     def clean(self):
         cleaned = super().clean()
+
         password = cleaned.get('password')
         confirmation = cleaned.get('password_confirmacion')
+
         if password and confirmation and password != confirmation:
-            self.add_error('password_confirmacion', 'Las contraseñas no coinciden.')
+            self.add_error(
+                'password_confirmacion',
+                'Las contraseñas no coinciden.'
+            )
+
         return cleaned
 
     def save(self, commit=True):
         user = super().save(commit=False)
+
         user.set_password(self.cleaned_data['password'])
+
         rol = self.cleaned_data.get('rol')
 
         if rol == 'administrador':
             user.is_staff = True
             user.is_superuser = True
+
         elif rol == 'operador':
             user.is_staff = True
             user.is_superuser = False
+
         else:
             user.is_staff = False
             user.is_superuser = False
@@ -204,4 +232,5 @@ class GestionUsuarioForm(forms.ModelForm):
 
         if commit:
             user.save()
+
         return user
