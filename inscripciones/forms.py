@@ -1,5 +1,6 @@
 
 from django import forms
+from django.contrib.auth import get_user_model
 from .models import Alumno, Documento
 
 
@@ -135,3 +136,72 @@ class RecuperoLibertadForm(forms.Form):
             raise forms.ValidationError('Debe indicar el domicilio nuevo.')
         return domicilio
 
+
+
+class GestionUsuarioForm(forms.ModelForm):
+    """Formulario para que el administrador cree usuarios del sistema."""
+    password = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        min_length=8,
+        help_text='Mínimo 8 caracteres.'
+    )
+    password_confirmacion = forms.CharField(
+        label='Repetir contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    rol = forms.ChoiceField(
+        label='Rol',
+        choices=[
+            ('usuario', 'Usuario'),
+            ('operador', 'Operador'),
+            ('administrador', 'Administrador'),
+        ],
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'first_name', 'last_name', 'email']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean_username(self):
+        username = self.cleaned_data['username'].strip()
+        User = get_user_model()
+        if User.objects.filter(username__iexact=username).exists():
+            raise forms.ValidationError('Ya existe un usuario con ese nombre.')
+        return username
+
+    def clean(self):
+        cleaned = super().clean()
+        password = cleaned.get('password')
+        confirmation = cleaned.get('password_confirmacion')
+        if password and confirmation and password != confirmation:
+            self.add_error('password_confirmacion', 'Las contraseñas no coinciden.')
+        return cleaned
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        rol = self.cleaned_data.get('rol')
+
+        if rol == 'administrador':
+            user.is_staff = True
+            user.is_superuser = True
+        elif rol == 'operador':
+            user.is_staff = True
+            user.is_superuser = False
+        else:
+            user.is_staff = False
+            user.is_superuser = False
+
+        user.is_active = True
+
+        if commit:
+            user.save()
+        return user

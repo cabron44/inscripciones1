@@ -4,6 +4,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.utils import timezone
 import base64
@@ -11,7 +12,7 @@ import io
 import json
 import qrcode
 from .models import Alumno, Documento, Transicion, AuditLog, Materia
-from .forms import AlumnoForm, DocumentoForm, TransicionForm, TrasladoForm, CambioCarreraForm, RecuperoLibertadForm
+from .forms import AlumnoForm, DocumentoForm, TransicionForm, TrasladoForm, CambioCarreraForm, RecuperoLibertadForm, GestionUsuarioForm
 
 
 def registrar_auditoria(alumno, usuario, accion, campo_modificado='', valor_anterior='', valor_nuevo='', descripcion=''):
@@ -449,6 +450,56 @@ def registrar_recupero_libertad(request, alumno_id):
         'titulo': 'Registrar recuperación de libertad'
     })
 
+
+
+@login_required
+def gestion_usuarios(request):
+    """Panel privado para que el superusuario cree y administre usuarios."""
+    if not request.user.is_superuser:
+        messages.error(request, 'No tenés permisos para administrar usuarios.')
+        return redirect('dashboard')
+
+    User = get_user_model()
+
+    if request.method == 'POST':
+        form = GestionUsuarioForm(request.POST)
+        if form.is_valid():
+            usuario = form.save()
+            messages.success(
+                request,
+                f'Usuario "{usuario.username}" creado correctamente.'
+            )
+            return redirect('gestion_usuarios')
+    else:
+        form = GestionUsuarioForm()
+
+    usuarios = User.objects.all().order_by('username')
+    return render(request, 'gestion_usuarios.html', {
+        'form': form,
+        'usuarios': usuarios,
+        'titulo': 'Administración de usuarios',
+    })
+
+
+@login_required
+def cambiar_estado_usuario(request, user_id):
+    """Activa o desactiva un usuario desde el panel de administración."""
+    if not request.user.is_superuser:
+        messages.error(request, 'No tenés permisos para administrar usuarios.')
+        return redirect('dashboard')
+
+    User = get_user_model()
+    usuario = get_object_or_404(User, id=user_id)
+
+    if usuario == request.user:
+        messages.warning(request, 'No podés desactivar tu propio usuario.')
+    else:
+        usuario.is_active = not usuario.is_active
+        usuario.save(update_fields=['is_active'])
+        estado = 'activado' if usuario.is_active else 'desactivado'
+        messages.success(request, f'Usuario "{usuario.username}" {estado}.')
+
+    return redirect('gestion_usuarios')
 
 def login_view(request):
     next_url = request.POST.get('next') or request.GET.get('next')

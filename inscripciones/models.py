@@ -2,8 +2,37 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
+class Usuario(AbstractUser):
+    class Rolchoices(models.IntegerChoices):
+        UNIVERSIDAD = 1, 'Universidad'
+        CENS = 2, 'Cens'
+        ISFT = 3, 'ISFT'
+        
+    
+    nombre = models.CharField(max_length=100, verbose_name="Nombre")
+    apellido = models.CharField(max_length=100, verbose_name="Apellido")
+    dni = models.CharField(max_length=8, unique=True, verbose_name="DNI")
+    email = models.EmailField(unique=True, verbose_name="Correo electrónico")
+    rol = models.IntegerField(choices=Rolchoices.choices, default=Rolchoices.ISFT, verbose_name="Rol")
+    is_active = models.BooleanField(default=True, verbose_name="Activo")
+
+    USERNAME_FIELD = 'dni'
+    REQUIRED_FIELDS = ['nombre', 'apellido', 'dni' 'email', 'rol']
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            ultimos_tres_dni = self.dni.strip()[-3:]
+            apellido_limpio = self.apellido.strip().replace(" ", "").lower()
+            password_automatica = f"{apellido_limpio}{ultimos_tres_dni}"
+            
+            self.set_password(password_automatica)
+        super().save(*args, **kwargs)
+    def __str__(self):
+        return f"{self.nombre} {self.apellido} - ROL: {self.get_rol_display()}"
+    
 class Alumno(models.Model):
     ESTADOS = [
         ('Preinscripto', 'Preinscripto'),
